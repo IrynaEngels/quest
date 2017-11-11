@@ -1,5 +1,6 @@
 package com.example.kapusta.quest;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,20 +12,35 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R2.id.button)
-    Button button;
-
     @BindView(R2.id.textView)
-    Button textView;
+    TextView textView;
+
+    @BindView(R2.id.rv)
+    RecyclerView resView;
+
+    @BindView(R2.id.btn_choice1)
+    Button btn_choice1;
+
+    @BindView(R2.id.btn_choice2)
+    Button btn_choice2;
+
+    ResViewAdapter adapter;
+    List<Message> list;
+    ArrayList<String> messages1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,49 +48,77 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-         getNotification(button);
+        AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MessageBroadcastReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(this, 1, intent, 0);
+        am.set(AlarmManager.RTC_WAKEUP, 3000, pi);
 
-    }
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        resView.setLayoutManager(llm);
 
-    public void getNotification(View v){
-        v.setOnClickListener(new View.OnClickListener() {
+        String[] names = getResources().getStringArray(R.array.messages1);
+        for(String e: names) {
+            messages1 = new ArrayList<>();
+            messages1.add(e);
+        }
+        for(int i = 0; i<messages1.size(); i++){
+            Message m = new Message();
+            m.setId(i);
+            m.setText(messages1.get(i));
+            list.add(m);
+        }
+
+        displayElements();
+
+        btn_choice1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-        Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                Context context = getApplicationContext();
 
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.addFlags((Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                        Intent.FLAG_ACTIVITY_FORWARD_RESULT));
-                intent.putExtra("text","test");
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
-//                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setSmallIcon(R.drawable.message)
-                        .setContentTitle("New message")
-                        .setContentText("You're faggot!")
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE).setAutoCancel(true)
-                        .setContentIntent(pendingIntent);
-
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                notificationManager.notify(0, notificationBuilder.build());
-}
-        };
-                final Handler handler1 = new Handler();
-                handler1.postDelayed(runnable1, 6000);
             }
         });
+        btn_choice2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
+//        getFragmentManager().beginTransaction().add(R.id.fragm_container, new QuestFragment()).commit();
     }
 
-    public String generateText(){
-        return null;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        textView.setText(intent.getExtras().getString("text", "test1"));
+
     }
+
+    private void displayElements(){
+        adapter = new ResViewAdapter(new ArrayList<>());
+        resView.setAdapter(adapter);
+        for (Message e: list) {
+            adapter.addElement(e);
+        }
+    }
+
+
+//    public void getNotification(View v){
+//        v.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//        Runnable runnable1 = new Runnable() {
+//            @Override
+//            public void run() {
+//
+//}
+//        };
+//                final Handler handler1 = new Handler();
+//                handler1.postDelayed(runnable1, 2000);
+//            }
+//        });
+//    }
+//
+//    public String generateText(){
+//        return null;
+//    }
 }

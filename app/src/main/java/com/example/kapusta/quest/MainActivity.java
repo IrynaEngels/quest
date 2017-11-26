@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, MessageBroadcastReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this, 1, intent, 0);
-        am.set(AlarmManager.RTC_WAKEUP, 3000, pi);
+        am.set(AlarmManager.RTC_WAKEUP, 1000, pi);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
@@ -122,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         btn1 = getResources().getStringArray(R.array.btn1);
         btn2 = getResources().getStringArray(R.array.btn2);
 
+        choice1 = mSettings.getString("Choice1", " ");//+1
+        choice2 = mSettings.getString("Choice2", " ");//+1
+
         if(realmStorage.getVersion() == 1) {
             list = new ArrayList<>();
             ///////////////
@@ -134,11 +137,19 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             list = new ArrayList<>();
+            receivedMessage = new ArrayList<>();
             for (Message m: realmStorage.readeReminders(this)) list.add(m);
             for(Message m: list)
             receivedAdapter.addElement(m);
-            choice1 = mSettings.getString("Choice1", " ");//+1
-            choice2 = mSettings.getString("Choice2", " ");//+1
+            for(int i = 0; i<btn1.length; i++) {
+                if (choice1 == btn1[i]) {
+                    if (i++ < btn1.length) {
+                        choice1 = btn1[i++];
+                        choice2 = btn2[--i];
+                    }
+                }
+            }
+            Log.d("TAG", "version 2"+ choice1+","+choice2);
         }
         btn_choice1.setText(choice1);
         btn_choice2.setText(choice2);
@@ -149,16 +160,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        //java.lang.NullPointerException: Attempt to invoke interface method
-        // 'java.lang.Object java.util.List.get(int)' on a null object reference
-//        at com.example.kapusta.quest.MainActivity.onNewIntent(MainActivity.java:149)
-        receivedAdapter.addElement(receivedMessage.get(0));
-        version=2;
-        realmStorage.setVersion(version);
-        mSettings.edit().putInt ("Version", version).apply();
-        animateText(500);
-        btn_choice1.setText(choice1);
-        btn_choice2.setText(choice2);
+        if(receivedMessage.size()!=0) {
+            receivedAdapter.addElement(receivedMessage.get(0));
+            version = 2;
+            realmStorage.setVersion(version);
+            mSettings.edit().putInt("Version", version).apply();
+            animateText(500);
+            btn_choice1.setText(choice1);
+            btn_choice2.setText(choice2);
+        }
     }
 
     private void receivedTextOutput(String[] messages){
@@ -176,8 +186,6 @@ public class MainActivity extends AppCompatActivity {
             realmStorage.saveReminder(this, m);
         }
     }
-    //айди входящих сообщений перезаписываются, текст кнопки сохраняется после сообщений,
-    //выводящихся ее нажатием
     private void messageOutput(View v){
 
         Message m = new Message();
@@ -197,9 +205,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        for(Message mes: realmStorage.readeReminders(this)){
-            Log.d("TAG", mes.getText()+ "messageOutput"+mes.getId());
-        }
 
         for(int i = 0; i<btn1.length; i++) {
             if (choice1 == btn1[i]) {
@@ -211,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
         }
         messageBroadcastReceiver.sendNotification(getApplicationContext(), "string");
         mSettings.edit().putString("Choice1", choice1).apply();
+        Log.d("TAG", mSettings.getString("Choice1", " "));
         mSettings.edit().putString("Choice2", choice2).apply();
+        Log.d("TAG", mSettings.getString("Choice2", " "));
     }
 
     public void animateText(final long mDelay) {

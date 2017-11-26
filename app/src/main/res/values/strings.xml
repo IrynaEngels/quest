@@ -1,10 +1,9 @@
 <resources>
     <string name="app_name">Quest</string>
     <string-array name="messages1">
-        <item>this</item>
-        <item>is</item>
-        <item>a String</item>
-        <item>array</item>
+        <item>я</item>
+        <item>ем</item>
+        <item>пирожок</item>
     </string-array>
     <string-array name="messages2">
         <item>the</item>
@@ -61,13 +60,13 @@
         <item>cat blanket</item>
     </string-array>
     <string-array name="btn1">
-        <item>somebody</item>
+        <item>он вкусный?</item>
         <item>once</item>
         <item>told</item>
         <item>me</item>
     </string-array>
     <string-array name="btn2">
-        <item>somebody 1</item>
+        <item>с чем он?</item>
         <item>once 1</item>
         <item>told 1</item>
         <item>me 1</item>

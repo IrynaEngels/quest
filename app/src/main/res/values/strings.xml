@@ -7,15 +7,69 @@
         <item>array</item>
     </string-array>
     <string-array name="messages2">
-        <item>this</item>
-        <item>is</item>
-        <item>a String</item>
+        <item>the</item>
+        <item>second</item>
+        <item>String</item>
         <item>array</item>
     </string-array>
     <string-array name="messages3">
-        <item>this</item>
-        <item>is</item>
-        <item>a String</item>
-        <item>array</item>
+        <item>leave</item>
+        <item>out</item>
+        <item>all the</item>
+        <item>rest</item>
+    </string-array>
+    <string-array name="messages4">
+        <item>falling</item>
+        <item>inside</item>
+        <item>the</item>
+        <item>black</item>
+    </string-array>
+    <string-array name="messages5">
+        <item>i</item>
+        <item>have</item>
+        <item>a</item>
+        <item>blanket</item>
+    </string-array>
+    <string-array name="messages6">
+        <item>cat this</item>
+        <item>cat is</item>
+        <item>cat a String</item>
+        <item>cat array</item>
+    </string-array>
+    <string-array name="messages7">
+        <item>cat the</item>
+        <item>cat second</item>
+        <item>cat String</item>
+        <item>cat array</item>
+    </string-array>
+    <string-array name="messages8">
+        <item>cat leave</item>
+        <item>cat out</item>
+        <item>cat all the</item>
+        <item>cat rest</item>
+    </string-array>
+    <string-array name="messages9">
+        <item>cat falling</item>
+        <item>cat inside</item>
+        <item>cat the</item>
+        <item>cat black</item>
+    </string-array>
+    <string-array name="messages10">
+        <item>cat i</item>
+        <item>cat have</item>
+        <item>cat a</item>
+        <item>cat blanket</item>
+    </string-array>
+    <string-array name="btn1">
+        <item>somebody</item>
+        <item>once</item>
+        <item>told</item>
+        <item>me</item>
+    </string-array>
+    <string-array name="btn2">
+        <item>somebody 1</item>
+        <item>once 1</item>
+        <item>told 1</item>
+        <item>me 1</item>
     </string-array>
 </resources>
